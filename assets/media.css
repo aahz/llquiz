@@ -1,0 +1,28 @@
+@media only screen {
+    .g-text-only-print {
+        display: none !important;
+    }
+}
+
+@media print {
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    ul > li {
+        list-style-type: none;
+    }
+
+    code {
+        white-space: pre-wrap;
+    }
+
+    .g-text-only-print {
+        display: inline !important;
+    }
+
+    .g-no-print {
+        display: none !important;
+    }
+}

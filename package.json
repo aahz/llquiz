@@ -1,0 +1,16 @@
+{
+  "name": "llquiz",
+  "version": "0.0.0",
+  "description": "Тестовое задание для кандидатов на должность Frontend-разработчика.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "author": "Lingualeo LLC",
+  "license": "MIT",
+  "dependencies": {
+    "better-console": "1.0.1",
+    "express": "4.16.2",
+    "yargs": "10.0.3"
+  }
+}
