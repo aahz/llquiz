@@ -3,6 +3,7 @@ const packageData = require('./package.json');
 const console = require('better-console');
 
 const argv = require('yargs')
+    .env('LLQUIZ')
     .option('port', {
         alias: 'p',
         type: 'string',
