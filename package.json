@@ -1,6 +1,6 @@
 {
   "name": "llquiz",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Тестовое задание для кандидатов на должность Frontend-разработчика.",
   "main": "server.js",
   "scripts": {
