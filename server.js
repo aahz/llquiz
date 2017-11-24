@@ -24,6 +24,8 @@ app.get('/', (req, res) => {
     res.send(welcomePage);
 });
 
-app.listen(argv.port, () => {
-    console.info(`${packageData.name}@${packageData.version} is listening on port ${argv.port}`);
+const port = (process.env.PORT || 3000);
+
+app.listen(port, () => {
+    console.info(`${packageData.name}@${packageData.version} is listening on port ${port}`);
 });
