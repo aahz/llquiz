@@ -4,16 +4,11 @@ const console = require('better-console');
 
 const argv = require('yargs')
     .env('LLQUIZ')
-    .option('port', {
-        alias: 'p',
-        type: 'string',
-        description: 'Set port for server',
-        default: 3000,
-    })
     .option('database', {
         alias: 'd',
         type: 'string',
         description: 'Set MongoDB connection URL',
+        demand: true,
     })
     .help()
     .argv;
