@@ -14,7 +14,6 @@ const argv = require('yargs')
         alias: 'd',
         type: 'string',
         description: 'Set MongoDB connection URL',
-        demand: true,
     })
     .help()
     .argv;
