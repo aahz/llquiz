@@ -1,5 +1,6 @@
 {
   "name": "llquiz",
+  "private": true,
   "version": "1.0.1",
   "description": "Тестовое задание для кандидатов на должность Frontend-разработчика.",
   "main": "server.js",
@@ -10,7 +11,12 @@
   "license": "MIT",
   "dependencies": {
     "better-console": "1.0.1",
+    "body-parser": "1.18.2",
     "express": "4.16.2",
+    "faker": "4.1.0",
+    "lodash": "4.17.4",
+    "mongoose": "4.13.5",
+    "node-telegram-bot-api": "0.29.0",
     "yargs": "10.0.3"
   }
 }
