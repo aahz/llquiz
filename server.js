@@ -1,6 +1,7 @@
 const packageData = require('./package.json');
 
 const console = require('better-console');
+const mongoose = require('mongoose');
 
 const argv = require('yargs')
     .env('LLQUIZ')
@@ -41,6 +42,22 @@ app.post('/feedback', API.FEEDBACK);
 
 const port = (process.env.PORT || 3000);
 
-app.listen(port, () => {
-    console.info(`${packageData.name}@${packageData.version} is listening on port ${port}`);
-});
+mongoose.Promise = global.Promise;
+
+mongoose.connect(argv.database, {
+    useMongoClient: true,
+    autoReconnect: true,
+    reconnectTries: 10,
+    promiseLibrary: global.Promise,
+}).then(
+    () => {
+        console.info('Database connection established.');
+
+        app.listen(port, () => {
+            console.info(`${packageData.name}@${packageData.version} is listening on port ${port}`);
+        });
+    },
+    error => {
+        console.error(error);
+    }
+);
