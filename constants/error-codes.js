@@ -1,6 +1,6 @@
 module.exports = {
-    INSUFFICIENT_DATA: 'insufficient_data',
     SOMETHING_WRONG_IN_THE_JUNGLE: 'something_wrong_in_the_jungle',
+    INSUFFICIENT_DATA: 'insufficient_data',
     WHO_ARE_YOU: 'who_are_you',
     NO_SECOND_CHANCE: 'no_second_chance',
     NO_CHERRY_ON_THE_CAKE: 'no_cherry_on_the_cake',
