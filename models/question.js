@@ -1,27 +1,9 @@
 const mongoose = require('mongoose');
 
-const {toClient} = require('../utils/schema');
-
 const {Schema} = mongoose;
 
-const VariantSchema = new Schema({
-    text: {
-        type: String,
-        trim: true,
-        required: true,
-    },
-    isCorrect: {
-        type: Boolean,
-        default: false,
-    },
-}, {
-    collection: 'variants',
-});
-
-VariantSchema.method('toClient', toClient);
-
 const QuestionSchema = new Schema({
-    question: {
+    text: {
         type: String,
         trim: true,
         required: true,
@@ -31,14 +13,20 @@ const QuestionSchema = new Schema({
         trim: true,
         allowBlank: true,
     },
-    variants: [VariantSchema],
+    variants: [{
+        text: {
+            type: String,
+            trim: true,
+            required: true,
+        },
+        isCorrect: {
+            type: Boolean,
+            default: false,
+        },
+    }],
 }, {
     collection: 'questions',
 });
 
-QuestionSchema.method('toClient', toClient);
-
 exports.QuestionSchema = QuestionSchema;
-exports.VariantSchema = VariantSchema;
-
 exports.QuestionModel = mongoose.model('Question', QuestionSchema);
