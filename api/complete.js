@@ -1,13 +1,19 @@
+const get = require('lodash/get');
+const find = require('lodash/find');
 const isString = require('lodash/isString');
 const isEmpty = require('lodash/isEmpty');
+const isError = require('lodash/isError');
 
 const {wrapResponseSuccess, wrapResponseError} = require('../utils/response');
 const {isMockId} = require('../utils/mock');
 const MOCK_START = require('../mock/start');
 const MOCK_QUESTIONS = require('../mock/questions');
-const {MOCK_NUMBER} = require('../constants/restrictions');
+const {TIME_FOR_ONE_QUESTION, MOCK_NUMBER} = require('../constants/restrictions');
 const REGEX = require('../constants/regex');
 const ERROR_CODES = require('../constants/error-codes');
+
+const {CandidateModel} = require('../models/candidate');
+const {QuestionModel} = require('../models/question');
 
 function prepareResponse(questions) {
     const response = {};
@@ -24,12 +30,13 @@ function prepareResponse(questions) {
 module.exports = function (req, res) {
     const {body} = req;
 
-    const userId = get(body, 'id');
+    const id = get(body, 'id');
     const email = get(body, 'email');
     const link = get(body, 'link');
-    const answers = get(body, 'result');
+    const answers = get(body, 'result', {});
+    const answersLength = Object.values(answers).length;
 
-    if (isEmpty(userId) || !isString(userId) || isEmpty(email) || isEmpty(link)) {
+    if (isEmpty(id) || !isString(id) || isEmpty(email) || isEmpty(link)) {
         res.json(wrapResponseError(ERROR_CODES.INSUFFICIENT_DATA));
 
         return;
@@ -47,14 +54,20 @@ module.exports = function (req, res) {
         return;
     }
 
-    if (isMockId(userId)) {
-        if (userId !== MOCK_START.id) {
+    if (!Object.values(answers).every(isString)) {
+        res.json(wrapResponseError(ERROR_CODES.RAMBLING));
+
+        return;
+    }
+
+    if (isMockId(id)) {
+        if (id !== MOCK_START.id) {
             res.json(wrapResponseError(ERROR_CODES.WHO_ARE_YOU));
 
             return;
         }
 
-        if (Object.values(answers).length !== MOCK_NUMBER) {
+        if (answersLength !== MOCK_NUMBER) {
             res.json(wrapResponseError(ERROR_CODES.EENY_MEENY_MINY_MOE));
 
             return;
@@ -65,11 +78,83 @@ module.exports = function (req, res) {
         return;
     }
 
-    // Real response
+    const completedTimestamp = Date.now();
+    const completedAt = new Date(completedTimestamp);
 
-    const result = {};
+    let shouldBeStartedAt = new Date(completedTimestamp);
 
-    // TODO:
+    new Promise((resolve, reject) => {
+        QuestionModel.find()
+            .exec((error, questions) => {
+                if (error) {
+                    reject(ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE);
 
-    res.json(wrapResponseSuccess(result));
+                    return;
+                }
+
+                const correctAnswers = {};
+                let correctAnswersLength = 0;
+
+                questions.forEach(question => {
+                    correctAnswers[question.id] = find(question.variants, {isCorrect: true}).id;
+                    correctAnswersLength += 1;
+                });
+
+                shouldBeStartedAt = new Date(completedTimestamp - Object.values(correctAnswers).length * TIME_FOR_ONE_QUESTION);
+
+                resolve({correctAnswers, correctAnswersLength});
+            });
+    })
+        .then(({correctAnswers, correctAnswersLength}) => new Promise((resolve, reject) => {
+            CandidateModel.findOne({_id: id})
+                .exec((error, candidate) => {
+                    if (error) {
+                        reject(ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE);
+
+                        return;
+                    }
+
+                    if (isEmpty(candidate)) {
+                        reject(ERROR_CODES.WHO_ARE_YOU);
+
+                        return;
+                    }
+
+                    if (!isEmpty(candidate.result.answers)) {
+                        reject(ERROR_CODES.NO_SECOND_CHANCE);
+
+                        return;
+                    }
+
+                    if (shouldBeStartedAt > new Date(candidate.result.startedAt)) {
+                        reject(ERROR_CODES.NOT_FAST_ENOUGH);
+
+                        return;
+                    }
+
+                    if (answersLength !== correctAnswersLength) {
+                        reject(ERROR_CODES.EENY_MEENY_MINY_MOE);
+
+                        return;
+                    }
+
+                    candidate.email = email;
+                    candidate.result.link = link;
+                    candidate.result.answers = answers;
+                    candidate.result.completedAt = completedAt;
+
+                    candidate.save(error => {
+                        if (error) {
+                            reject(ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE);
+
+                            return;
+                        }
+
+                        res.json(wrapResponseSuccess(correctAnswers));
+                    });
+                });
+        }))
+        .catch(code => {
+            res.json(wrapResponseError(isError(code) ? ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE : code));
+        });
 };
