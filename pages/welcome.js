@@ -143,7 +143,6 @@ module.exports = (
                         ${printExplanationList({
                             '[Object] data': 'ответ сервера',
                             '[String] data.id': 'идентификатор пользователя для использования в последующих запросах',
-                            '[Number] data.restriction': 'количество времени в милисекундах для прохождения теста',
                             '[Boolean] success': 'статус успешности обработки запроса',
                         })}
 
@@ -151,7 +150,6 @@ module.exports = (
                             {
                                 data: {
                                     id: '123456789abcdef',
-                                    restriction: 900000,
                                 },
                                 success: true,
                             }
@@ -171,7 +169,7 @@ module.exports = (
                         ${printExplanationList({
                             [ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE]: 'произошла внутренняя ошибка на сервере',
                             [ERROR_CODES.INSUFFICIENT_DATA]: 'не предаставленны все необходимые данные для начала тестирования',
-                            [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата',
+                            [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата (только для <span class="ll-code">isFinalAttempt === true</span>)',
                         })}
                         
                         ${printJSONCodeBlock(
@@ -205,41 +203,47 @@ module.exports = (
                         
                         ${printExplanationList({
                             '[Array&lt;Object&gt;] data': 'ответ сервера',
-                            '[String] data[].id': 'идентификатор вопроса',
-                            '[String] data[].question': 'текст вопроса',
-                            '[?String] data[].expression': 'сопутствующий код для вопроса, если таковой подразумевается в вопросе',
-                            '[Array&lt;Object&gt;] data[].variants': 'варианты ответа',
-                            '[String] data[].variants[].id': 'идентификатор варианта ответа',
-                            '[String] data[].variants[].text': 'текст варианта ответа',
+                            '[Number] data.restriction': 'количество времени в милисекундах для прохождения теста',
+                            '[Array&lt;Object&gt;] data.questions': 'массив вопросов',
+                            '[String] data.questions[].id': 'идентификатор вопроса',
+                            '[String] data.questions[].text': 'текст вопроса',
+                            '[(String|Null)] data.questions[].expression': 'сопутствующий код для вопроса, если таковой подразумевается в вопросе',
+                            '[Array&lt;Object&gt;] data.questions[].variants': 'варианты ответа',
+                            '[String] data.questions[].variants[].id': 'идентификатор варианта ответа',
+                            '[String] data.questions[].variants[].text': 'текст варианта ответа',
                             '[Boolean] success': 'статус успешности обработки запроса',
                         })}
                         
                         ${printJSONCodeBlock(
                             {
-                                data: [
-                                    {
-                                        id: '1a2b3c',
-                                        question: 'Что будет выведено в консоли по факту выполнения этого кода?',
-                                        expression: 'console.log("Hello, World!")',
-                                        variants: [
-                                            {id: 'a4b221', text: 'Hello, World!'},
-                                            {id: 'b7defa', text: 'Necronomicon'},
-                                            {id: 'f778ad', text: 'undefined'},
-                                            {id: 'eee501', text: 'NaN'},
-                                        ],
-                                    },
-                                    {
-                                        id: '4d5e6f',
-                                        question: 'Какой из перечисленных типов объекта в JS не имеет литерального синтаксиса?',
-                                        variants: [
-                                            {id: 'fac3a2', text: 'Array'},
-                                            {id: 'abc399', text: 'Object'},
-                                            {id: '3bce55', text: 'Date'},
-                                            {id: '6690dd', text: 'Set'},
-                                            {id: '4444fc', text: 'String'},
-                                        ],
-                                    }
-                                ],
+                                data: {
+                                    restriction: 180000,
+                                    questions: [
+                                        {
+                                            id: '1a2b3c',
+                                            text: 'Что будет выведено в консоли по факту выполнения этого кода?',
+                                            expression: 'console.log("Hello, World!")',
+                                            variants: [
+                                                {id: 'a4b221', text: 'Hello, World!'},
+                                                {id: 'b7defa', text: 'Necronomicon'},
+                                                {id: 'f778ad', text: 'undefined'},
+                                                {id: 'eee501', text: 'NaN'},
+                                            ],
+                                        },
+                                        {
+                                            id: '4d5e6f',
+                                            text: 'Какой из перечисленных типов объекта в JS не имеет литерального синтаксиса?',
+                                            expression: null,
+                                            variants: [
+                                                {id: 'fac3a2', text: 'Array'},
+                                                {id: 'abc399', text: 'Object'},
+                                                {id: '3bce55', text: 'Date'},
+                                                {id: '6690dd', text: 'Set'},
+                                                {id: '4444fc', text: 'String'},
+                                            ],
+                                        }
+                                    ],
+                                },
                                 success: true,
                             }
                         )}
@@ -258,6 +262,7 @@ module.exports = (
                         ${printExplanationList({
                             [ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE]: 'произошла внутренняя ошибка на сервере',
                             [ERROR_CODES.INSUFFICIENT_DATA]: 'не предаставленны все необходимые данные для получения списка вопросов',
+                            [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата (только для <span class="ll-code">isFinalAttempt === true</span>)',
                             [ERROR_CODES.WHO_ARE_YOU]: 'не найден запрошенный идетификатор пользователя',
                         })}
                         
@@ -328,6 +333,7 @@ module.exports = (
                         ${printExplanationList({
                             [ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE]: 'произошла внутренняя ошибка на сервере',
                             [ERROR_CODES.INSUFFICIENT_DATA]: 'не предаставленны все необходимые данные для записи ответа',
+                            [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата (только для <span class="ll-code">isFinalAttempt === true</span>)',
                             [ERROR_CODES.WHO_ARE_YOU]: 'не найден запрошенный идетификатор пользователя',
                             [ERROR_CODES.NO_CHERRY_ON_THE_CAKE]: 'невалидная ссылка на репозиторий',
                             [ERROR_CODES.ANONYMOUS_FOUND]: 'невалидный адрес электронной почты',
