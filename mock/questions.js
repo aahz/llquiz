@@ -31,7 +31,7 @@ if( b.toString().length() == 4 ) {
 module.exports = times(MOCK_NUMBER, function () {
     const result = {
         id: getMockId(),
-        question: faker.lorem.sentences(),
+        text: faker.lorem.sentences(),
         variants: times(faker.random.number({min: 2, max: 8}), function (i) {
             const isCorrect = i === 1;
 
@@ -45,6 +45,9 @@ module.exports = times(MOCK_NUMBER, function () {
 
     if (Math.round(Math.random())) {
         result.expression = sample(CODE_EXAMPLES);
+    }
+    else {
+        result.expression = null;
     }
 
     return result;
