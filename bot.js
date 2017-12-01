@@ -9,6 +9,11 @@ const bot = new SlackBot({
     name: 'LLQuiz Notifier',
 });
 
+const botStartupPromise = new Promise((resolve, reject) => {
+    bot.on('open', resolve);
+    bot.on('error', reject);
+});
+
 const DATE_FORMAT = 'DD.MM.YYYY, HH:mm:ss';
 
 function notifyNewCandidate(candidate) {
@@ -35,5 +40,6 @@ function notifyNewCandidate(candidate) {
 
 module.exports = {
     bot,
+    botStartupPromise,
     notifyNewCandidate,
 };
