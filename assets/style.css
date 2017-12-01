@@ -207,3 +207,98 @@ ul.ll-list > li {
     top: 20px;
     z-index: 100;
 }
+
+.ll-quote {
+    position: relative;
+    padding: 0 20px;
+    margin: 0 20px 10px;
+}
+
+.ll-quote:before {
+    content: "«";
+    font-size: 28px;
+    position: absolute;
+    color: #48B484;
+    top: -3px;
+    left: -10px;
+}
+
+.ll-quote:after {
+    content: "»";
+    font-size: 28px;
+    position: absolute;
+    color: #48B484;
+    bottom: 3px;
+    right: -10px;
+}
+
+.ll-answer {
+    display: flex;
+    position: relative;
+    padding: 20px 10px 10px 30px;
+    margin-bottom: 20px;
+    min-height: 40px;
+    background: #D0D0D0;
+}
+
+.ll-answer.ll-answer__m-correct,
+.ll-answer.ll-answer__m-incorrect {
+    color: #FAFAFA;
+}
+
+.ll-answer.ll-answer__m-correct {
+    background: #48B484;
+}
+
+.ll-answer.ll-answer__m-incorrect {
+    background: #DB523D;
+}
+
+.ll-answer.ll-answer__m-positive:after {
+    content: 'этот вопрос понравился кандидату';
+    position: absolute;
+    color: #48B484;
+    top: -11px;
+    right: 0;
+    background: #FAFAFA;
+    padding: 0 0 0 6px;
+    border-radius: 0 0 0 10px;
+    font-size: 0.7em;
+}
+
+.ll-answer.ll-answer__m-negative:after {
+    content: 'этот вопрос не понравился кандидату';
+    position: absolute;
+    color: #DB523D;
+    top: -11px;
+    right: 0;
+    background: #FAFAFA;
+    padding: 0 0 0 6px;
+    border-radius: 0 0 0 10px;
+    font-size: 0.7em;
+}
+
+.ll-answer .ll-answer__number {
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #FAFAFA;
+    color: #D0D0D0;
+}
+
+.ll-answer.ll-answer__m-correct .ll-answer__number {
+    color: #48B484;
+}
+
+.ll-answer.ll-answer__m-correct .ll-answer__question__answer__m-incorrect {
+    display: none;
+}
+
+.ll-answer.ll-answer__m-incorrect .ll-answer__number {
+    color: #DB523D;
+}
