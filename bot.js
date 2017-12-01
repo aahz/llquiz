@@ -1,6 +1,7 @@
 const console = require('better-console');
 const moment = require('moment');
 const SlackBot = require('slackbots');
+const trimEnd = require('lodash/trimEnd');
 const find = require('lodash/find');
 
 const argv = require('./utils/argv');
@@ -20,9 +21,7 @@ bot.on('error', error => {
 
 const DATE_FORMAT = 'dddd, DD.MM.YYYY, HH:mm:ss';
 
-function notifyNewCandidate(candidate, questions, correctAnswers) {
-    const questionsIds = Object.keys(correctAnswers);
-
+function notifyNewCandidate(candidate) {
     const startedAt = moment(candidate.result.startedAt);
     const completedAt = moment(candidate.result.completedAt);
 
@@ -38,35 +37,8 @@ function notifyNewCandidate(candidate, questions, correctAnswers) {
 
     message += `Время начала тестирования: ${startedAt.format(DATE_FORMAT)}\n`
     message += `Время окончания тестирования: ${completedAt.format(DATE_FORMAT)}\n`
-    message += `Ссылка на выполненное тестовое задание: ${candidate.result.link}\n\n`;
-    message += 'Ответы:\n';
-
-    message += questionsIds.map((questionId, index) => {
-        let result = '';
-
-        const question = find(questions, question => question.id === questionId);
-
-        if (!question) {
-            return null;
-        }
-
-        const correctAnswerId = correctAnswers[questionId];
-        const candidateAnswerId = candidate.result.answers[questionId];
-
-        result += `${index + 1}. ${question.text}\n`;
-
-        if (question.expression) {
-            result += '```\n' + question.expression + '\n```\n';
-        }
-
-        result += `> _Правильный ответ_: ${find(question.variants, variant => variant.id === correctAnswerId).text}\n`;
-
-        if (correctAnswerId !== candidateAnswerId) {
-            result += `> _Неправильный ответ (ответ пользователя)_: ${find(question.variants, variant => variant.id === candidateAnswerId).text}\n`;
-        }
-
-        return result;
-    }).join('\n');
+    message += `Ссылка на репозиторий: ${candidate.result.link}\n`;
+    message += `Ответы на вопросы теста: ${trimEnd(argv.url, '/')}/results/${candidate.id}`;
 
     bot.postMessage(argv.channel, message);
 }

@@ -18,6 +18,11 @@ const argv = require('yargs')
         description: 'Set Slack Bot destination channel id',
         demand: true,
     })
+    .option('url', {
+        alias: 'u',
+        type: 'string',
+        description: 'Set server url for results link creation',
+    })
     .help()
     .argv;
 

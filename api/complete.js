@@ -144,7 +144,7 @@ module.exports = function (req, res) {
                             return;
                         }
 
-                        notifyNewCandidate(candidate, questions, correctAnswers);
+                        notifyNewCandidate(candidate);
 
                         res.json(wrapResponseSuccess(correctAnswers));
                     });
