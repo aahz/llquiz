@@ -87,7 +87,7 @@ app.get('/results/:id', (req, res) => {
                 result.text = question.text;
 
                 if (question.expression) {
-                    result.expression = question.expression;
+                    result.expression = question.expression.replace(/\\n/g, '\n');
                 }
 
                 const correctVariant = find(question.variants, variant => variant.isCorrect);

@@ -98,7 +98,7 @@ module.exports = function (req, res) {
                         questions: shuffle(questions.map(question => ({
                             id: question.id,
                             text: question.text,
-                            expression: question.expression,
+                            expression: question.expression.replace(/\\n/g, '\n'),
                             variants: shuffle(question.variants.map(variant => ({
                                 id: variant.id,
                                 text: variant.text,
