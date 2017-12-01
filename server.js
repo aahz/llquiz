@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 
 const find = require('lodash/find');
 
+const {bot} = require('./bot');
 const argv = require('./utils/argv');
 
 const HEADERS = require('./constants/headers');
@@ -144,10 +145,21 @@ mongoose.connect(argv.database, {
     promiseLibrary: global.Promise,
 }).then(
     () => {
-        console.info('Database connection established.');
+        console.log(`Database connection to ${argv.database} is established.`);
 
-        app.listen(port, () => {
-            console.info(`${packageData.name}@${packageData.version} is listening on port ${port}`);
+        bot.on('open', () => {
+            console.log(`Slack bot ${argv.token} is ready to communicate to ${argv.channel} channel.`);
+
+            app.listen(port, () => {
+                console.log(`Application is available at ${argv.url}, application port is port ${port}.`)
+                console.info(`\n${packageData.name}@${packageData.version} is listening…`);
+            });
+        });
+
+        bot.on('error', error => {
+            console.error('Slack bot starting failed', error.toString());
+
+            process.exit(1);
         });
     },
     error => {

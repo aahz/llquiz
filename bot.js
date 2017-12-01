@@ -1,8 +1,6 @@
-const console = require('better-console');
 const moment = require('moment');
 const SlackBot = require('slackbots');
 const trimEnd = require('lodash/trimEnd');
-const find = require('lodash/find');
 
 const argv = require('./utils/argv');
 
@@ -11,15 +9,7 @@ const bot = new SlackBot({
     name: 'LLQuiz Notifier',
 });
 
-bot.on('open', () => {
-    console.info("Slack bot is ready to communicate");
-});
-
-bot.on('error', error => {
-    console.error('Slack bot starting failed', error)
-});
-
-const DATE_FORMAT = 'dddd, DD.MM.YYYY, HH:mm:ss';
+const DATE_FORMAT = 'DD.MM.YYYY, HH:mm:ss';
 
 function notifyNewCandidate(candidate) {
     const startedAt = moment(candidate.result.startedAt);
@@ -40,7 +30,7 @@ function notifyNewCandidate(candidate) {
     message += `Ссылка на репозиторий: ${candidate.result.link}\n`;
     message += `Ответы на вопросы теста: ${trimEnd(argv.url, '/')}/results/${candidate.id}`;
 
-    bot.postMessage(argv.channel, message);
+    bot.postMessage(argv.channel, message, {icon_emoji: ':bust_in_silhouette:'});
 }
 
 module.exports = {
