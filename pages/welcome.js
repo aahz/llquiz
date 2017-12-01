@@ -1,5 +1,3 @@
-const packageData = require('../package.json');
-
 function printJSON(data, spaces = 2) {
     return JSON.stringify(data, null, spaces);
 }
@@ -67,11 +65,12 @@ const REQUESTS = {
     }
 };
 
-module.exports = (
+module.exports = function (params) {
+    return (
 `<!DOCTYPE html>
 <html>
     <head>
-        <title>${packageData.name}@${packageData.version} :: ${packageData.description}</title>
+        <title>${params.title}</title>
         <link rel="shortcut icon" href="/assets/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
@@ -83,11 +82,13 @@ module.exports = (
             <div class="ll-header"></div>
             <div class="ll-content">
                 <h1 class="ll-title">
-                    <span class="g-no-print ll-title__random">Lingualeo</span>
-                    <span class="g-text-only-print">Тестовое задание</span>
+                    <span class="g-no-print ll-title__random">${params.header}</span>
+                    <span class="g-text-only-print">Тестовое задание Lingualeo</span>
                 </h1>
                 
                 <h2 class="g-no-print">Для тех, кто уже все видел и хочет сразу десерт</h2>
+                
+                <p class="g-no-print">На тот случай, если ты уже все видел и хочешь сразу перейти к описанию запросов к API, мы, чисто случайно, оставили здесь ссылочки:</p>
                 
                 <ul class="g-no-print ll-list ll-list__m-inline">
                     ${Object.values(REQUESTS).map(request => (`<li>${printRequestLink(request)}</li>`)).join('')}
@@ -95,11 +96,11 @@ module.exports = (
                 
                 <h2 class="g-no-print">Что это и с чем едят?</h2>
                 
-                <p>Это тестовое задание команды <a href="https://lingualeo.com/" target="_blank">Lingualeo</a> на должность <strong class="ll-nowrap">Frontend-разработчика</strong>. Мы рады, что ты согласился его выполнить и сейчас расскажем, что мы хотим увидеть в результате его выполнения и немного о том, что и как мы будем проверять ;)</p>
+                <p>Это тестовое задание команды <a href="https://lingualeo.com/" target="_blank">Lingualeo</a> на должность <a href="https://corp.lingualeo.com/ru/2017/10/23/javascript-razrabotchik/" class="ll-nowrap" target="_blank">Frontend-разработчика</a>. Мы рады, что ты согласился его выполнить и сейчас расскажем, что мы хотим увидеть в результате его выполнения и немного о том, что и как мы будем проверять ;)</p>
                 
                 <p>Тестовое задание небольшое и, надеемся, интересное. <span class="g-no-print">Все до безобразия просто: текущий адрес есть ни что иное, как точка входа в простенькое API для теста на знание JS.</span> А задание сводится к тому, что нужно, прочитав описание к <span class="g-no-print">этому</span> API, набросать клиент, который будет красиво выводить вопросы по одному с ограничением по времени прохождения всего теста, которое вернется в результате запроса ${printRequestLink(REQUESTS.START)}, потом на них ответить, а в конце приложить к ответу ${printRequestLink(REQUESTS.COMPLETE)} ссылку на репозиторий с исходниками клиента. Результат запроса ${printRequestLink(REQUESTS.GET_QUESTIONS)} с вопросами для тестирования не содержит указаний на то, какой ответ правильный, а какой нет (то есть в течении теста не нужно проверять правильно ли ответил пользователь или нет), эту информацию мы пришлем только в ответ на запрос ${printRequestLink(REQUESTS.COMPLETE)}. В конце, опционально, можно попросить обратную связь с помощью запроса <span class="ll-nowrap">${printRequestLink(REQUESTS.FEEDBACK)}.</span></p>
                 
-                <p>Сейчас еще немного графомании и ниже будет описание API, терпение. По результатам этого тестового задания мы еще разок пообщаемся с тобой в формате Skype-беседы, где сначала мы поспрашиваем тебя самые, на наш взгляд, интересные штуки, а потом дадим время тебе позадавать нам все вопросы, которые придут в голову. И если так выйдет, что тебе понравятся наши ответы, а нам твои — последний этап, на котором мы пригласим тебя пообщаться с командой в офис уже на менее специфические темы. Просто познакомиться вживую. Короче, мы все дружно сядем в кружок и просто будем болтать о музыке, кинигах, кино, личном опыте и отношении к работе и отдыху (мы тут типа уважаем ценности друг друга, все дела, прогресс и непринужденность, котики рулят интернетом…).</p>
+                <p>Сейчас еще немного графомании и ниже будет описание API, терпение. По результатам этого тестового задания мы обязательно ответим тебе на указанный в конце ответа на тестовое задание адрес электронной почты, а если решим продолжать по результатам выполнения, то договоримся и устроим общение в формате Skype-беседы, где сначала мы поспрашиваем тебя самые, на наш взгляд, интересные штуки, а потом дадим время тебе позадавать нам все вопросы, которые придут в голову. И если так выйдет, что тебе понравятся наши ответы, а нам твои — последний этап, на котором мы пригласим тебя пообщаться с командой в офис уже на менее специфические темы. Просто познакомиться вживую. Короче, мы все дружно сядем в кружок и просто будем болтать о музыке, кинигах, кино, личном опыте и отношении к работе и отдыху (мы тут типа уважаем ценности друг друга, все дела, прогресс и непринужденность, котики рулят интернетом…).</p>
                 
                 <h2>Теперь о главном блюде</h2>
                 
@@ -127,6 +128,8 @@ module.exports = (
                         ${printExplanationList({
                             '[String] name': 'имя кандидата',
                             '[String] skype': 'идентификатор Skype для следующего тура',
+                            '[String] cv': 'ссылка на резюме в любом удобном для вас виде (ссылка на hh/linkedin/свой маленький уютный сайт)',
+                            '[String] link': 'ссылка на репозиторий с исходным кодом',
                             '[?Boolean] isFinalAttempt': 'является ли данная попытка зачетной',
                         })}
                         
@@ -134,9 +137,13 @@ module.exports = (
                             {
                                 name: 'Ashley James Williams',
                                 skype: 'bruceCampbell_58',
+                                cv: 'http://hh.ru/my-awesome-job-history',
+                                link: 'http://github.com/evildead/ll-task',
                                 isFinalAttempt: true,
                             }
                         )}
+                        
+                        <p>Обрати внимание, что если параметр <span class="ll-code">isFinalAttempt</span> выставлен в значение <span class="ll-code">false</span> или не передан, то мы ничего никуда на записываем, потому параметр <span class="ll-code">skype</span> может быть любым, а ссылки могут вести куда угодно, главное, чтобы проходили валидацию. То же самое касается и параметра <span class="ll-code">email</span> в запросе ${printRequestLink(REQUESTS.COMPLETE)}.</p>
                         
                         <h4>Ответ</h4>
                         
@@ -170,7 +177,10 @@ module.exports = (
                             [ERROR_CODES.SOMETHING_WRONG_IN_THE_JUNGLE]: 'произошла внутренняя ошибка на сервере',
                             [ERROR_CODES.INSUFFICIENT_DATA]: 'не предаставленны все необходимые данные для начала тестирования',
                             [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата (только для <span class="ll-code">isFinalAttempt === true</span>)',
-                        })}
+                            [ERROR_CODES.NO_CHERRY_ON_THE_CAKE]: 'невалидная ссылка на репозиторий',
+                            [ERROR_CODES.NO_CREAM_ON_THE_CAKE]: 'невалидная ссылка на резюме',
+
+})}
                         
                         ${printJSONCodeBlock(
                             {
@@ -185,7 +195,7 @@ module.exports = (
                     
                     <dt>${printRequestHeader(REQUESTS.GET_QUESTIONS)}</dt>
                     <dd>
-                        <p>Запрос списка заданий для прохождения. Начиная с этого запроса на сервере пойдет отсчет времени на выполнение задания.</p>
+                        <p>Запрос списка заданий для прохождения.</p>
                         
                         <h4>Параметры</h4>
                         
@@ -286,7 +296,6 @@ module.exports = (
                         ${printExplanationList({
                             '[String] id': 'идентификатор пользователя',
                             '[String] email': 'адрес электронной почты для связи',
-                            '[String] link': 'ссылка на репозиторий с исходным кодом',
                             '[Object&lt;String, String&gt;] result': 'результат тестирования, где ключом явлется идентификатор вопроса, а значением — идентификатор <strong>выбранного</strong> ответа',
                         })}
                         
@@ -294,13 +303,14 @@ module.exports = (
                             {
                                 id: '123456789abcdef',
                                 email: 'brucecampbell_58@deadites.com',
-                                link: 'http://github.com/evildead/ll-task',
                                 result: {
                                     '1a2b3c': 'f778ad',
                                     '4d5e6f': '3bce55',
                                 },
                             }
                         )}
+                        
+                        <p>Еще раз надоедливо напоминаем, что если запрос ${printRequestLink(REQUESTS.START)} выполнен без параметра <span class="ll-code">isFinalAttempt</span> или со значением <span class="ll-code">false</span>, то мы не записываем переданные данные, потому поле <span class="ll-code">email</span> может содержать любую строку, которая проходит минимальную валидацию, равно как и пармаетры <span class="ll-code">skype</span>, <span class="ll-code">link</span> и <span class="ll-code">cv</span> для запроса ${printRequestLink(REQUESTS.START)}.</p>
                         
                         <h4>Ответ</h4>
                         
@@ -335,7 +345,6 @@ module.exports = (
                             [ERROR_CODES.INSUFFICIENT_DATA]: 'не предаставленны все необходимые данные для записи ответа',
                             [ERROR_CODES.NO_SECOND_CHANCE]: 'попытка повторного прохождения теста в режиме отправки результата (только для <span class="ll-code">isFinalAttempt === true</span>)',
                             [ERROR_CODES.WHO_ARE_YOU]: 'не найден запрошенный идетификатор пользователя',
-                            [ERROR_CODES.NO_CHERRY_ON_THE_CAKE]: 'невалидная ссылка на репозиторий',
                             [ERROR_CODES.ANONYMOUS_FOUND]: 'невалидный адрес электронной почты',
                             [ERROR_CODES.EENY_MEENY_MINY_MOE]: 'количество ответов не совпадает с количеством вопросов',
                             [ERROR_CODES.RAMBLING]: 'некорректное содержание объекта с ответами',
@@ -362,7 +371,7 @@ module.exports = (
                         ${printExplanationList({
                             '[String] id': 'идентификатор пользователя',
                             '[?Array&lt;String&gt;] liked': 'массив идентификаторов вопросов, которые понравились/показались интересными <span class="ll-nowrap">(до <strong>3</strong> вариантов)</span>',
-                            '[?Array&lt;String&gt;] disliked': 'массив идентификаторов вопросов, которые не понравились/показались странными <span class="ll-nowrap">(до <strong>3</strong> вариантов)</span>',
+                            '[?Array&lt;String&gt;] disliked': 'массив идентификаторов вопросов, которые <span class="ll-nowrap">не понравились</span>/показались странными <span class="ll-nowrap">(до <strong>3</strong> вариантов)</span>',
                             '[?String] comment': 'комментарий в свободной форме <span class="ll-nowrap">(до <strong>1000</strong> символов)</span>',
                         })}
                         
@@ -420,8 +429,7 @@ module.exports = (
                 </dl>
             </div>
         </div>
-        
-        <script src="/assets/scripts.js"></script>
     </body>
 </html>`
-);
+    );
+};

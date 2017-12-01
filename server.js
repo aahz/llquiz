@@ -10,9 +10,10 @@ const app = express();
 
 const bodyParser = require('body-parser');
 
-const welcomePage = require('./pages/welcome');
 const argv = require('./utils/argv');
 
+const HEADERS = require('./constants/headers');
+const welcomePageRenderer = require('./pages/welcome');
 
 const API = {
     START: require('./api/start'),
@@ -27,7 +28,10 @@ app.use('/assets', express.static('assets'));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.send(welcomePage);
+    res.send(welcomePageRenderer({
+        title: `${packageData.name}@${packageData.version} — ${packageData.description}`,
+        header: HEADERS[Math.floor(Math.random() * HEADERS.length)],
+    }));
 });
 
 app.post('/start', API.START);

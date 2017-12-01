@@ -85,6 +85,10 @@ a:focus {
     line-height: 1.4em;
     padding-bottom: 15px;
     margin-bottom: 15px;
+    min-height: 78px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 dl.ll-api-list > dt > h3 {
