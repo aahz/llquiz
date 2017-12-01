@@ -3,22 +3,7 @@ const packageData = require('./package.json');
 const console = require('better-console');
 const mongoose = require('mongoose');
 
-const argv = require('yargs')
-    .env('LLQUIZ')
-    .option('database', {
-        alias: 'd',
-        type: 'string',
-        description: 'Set MongoDB connection URL',
-        demand: true,
-    })
-    .option('token', {
-        alias: 't',
-        type: 'string',
-        description: 'Set Slack Bot API token for new candidates notifications',
-        demand: true,
-    })
-    .help()
-    .argv;
+const moment = require('moment');
 
 const express = require('express');
 const app = express();
@@ -26,6 +11,8 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const welcomePage = require('./pages/welcome');
+const argv = require('./utils/argv');
+
 
 const API = {
     START: require('./api/start'),
@@ -33,6 +20,8 @@ const API = {
     COMPLETE: require('./api/complete'),
     FEEDBACK: require('./api/feedback'),
 };
+
+moment.locale('ru');
 
 app.use('/assets', express.static('assets'));
 app.use(bodyParser.json());
