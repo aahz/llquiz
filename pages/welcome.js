@@ -16,8 +16,8 @@ function printJSONCodeBlock(data, isExample) {
     return printCodeBlock(printJSON(data), isExample);
 }
 
-function printRequestHeader(request) {
-    return `<h3 id="${request.link.replace(/^#/, '')}">${request.type} ${request.text}</h3>`;
+function printRequestHeader(url, request) {
+    return `<h3 id="${request.link.replace(/^#/, '')}">${request.type} ${url.replace(/\/$/, '')}${request.text}</h3>`;
 }
 
 function printRequestLink(request) {
@@ -68,7 +68,7 @@ const REQUESTS = {
 module.exports = function (params) {
     return (
 `<!DOCTYPE html>
-<html>
+<html lang="ru">
     <head>
         <title>${params.title}</title>
         <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -108,10 +108,10 @@ module.exports = function (params) {
                 
                 <p>Все запросы/ответы в формате JSON.</p>
                 
-                <p>Ответ всегда содержит два поля: <span class="ll-code">[(Object|Array)] data</span> для передачи информации по результатам запроса и <span class="ll-code">[Boolean] success</span> для указания статуса успешности выполнения запроса. Пример ответа на любой из перечисленных ниже запросов:</p>
+                <p>Ответ всегда содержит два поля: <span class="ll-code">[Object] data</span> для передачи информации по результатам запроса и <span class="ll-code">[Boolean] success</span> для указания статуса успешности выполнения запроса. Пример ответа на любой из перечисленных ниже запросов:</p>
                 
                 ${printCodeBlock(
-                    `{\n  "data": ({}|[]), // ответ сервера\n  "success": (true|false) // статус успешности обработки запроса\n}`, 
+                    `{\n  "data": {}, // ответ сервера\n  "success": (true|false) // статус успешности обработки запроса\n}`, 
                     false
                 )}
                 
@@ -119,7 +119,7 @@ module.exports = function (params) {
                 
                 <dl class="ll-api-list">
                 
-                    <dt>${printRequestHeader(REQUESTS.START)}</dt>
+                    <dt>${printRequestHeader(params.url, REQUESTS.START)}</dt>
                     <dd>
                         <p>Запрос на начало прохождения теста. При передаче параметра <span class="ll-code">isFinalAttempt: true</span> API начнет отдавать настоящие вопросы и запишет в конце результат прохождения. <strong>Не передавай данный параметр</strong> до тех пор, пока не готов завершить выполнение задания, поскольку повторно пройти тест нельзя. При значении поля <span class="ll-code">isFinalAttempt</span>, приравнивающемся к <span class="ll-code">false</span>, проходить задания можно хоть <span class="ll-nowrap ll-easter-egg">&laquo;до посинения&raquo;<img class="g-no-print ll-easter-egg__image" alt="easter-egg" src="/assets/easter-egg.gif" /></span>, задания и варианты ответов будут представлять из себя слабо связанную с реальностью &laquo;рыбу&raquo;, а ответы, которые сервер будет распознавать как корректные, в тексте будут помечаны символом <span class="ll-code">+</span> в начале.</p>
                         
@@ -193,7 +193,7 @@ module.exports = function (params) {
                         )}
                     </dd>
                     
-                    <dt>${printRequestHeader(REQUESTS.GET_QUESTIONS)}</dt>
+                    <dt>${printRequestHeader(params.url, REQUESTS.GET_QUESTIONS)}</dt>
                     <dd>
                         <p>Запрос списка заданий для прохождения.</p>
                         
@@ -287,7 +287,7 @@ module.exports = function (params) {
                         )}
                     </dd>
                     
-                    <dt>${printRequestHeader(REQUESTS.COMPLETE)}</dt>
+                    <dt>${printRequestHeader(params.url, REQUESTS.COMPLETE)}</dt>
                     <dd>
                         <p>Отправка результатов прохождения теста.</p>
                         
@@ -362,7 +362,7 @@ module.exports = function (params) {
                         )}
                     </dd>
                     
-                    <dt>${printRequestHeader(REQUESTS.FEEDBACK)}</dt>
+                    <dt>${printRequestHeader(params.url, REQUESTS.FEEDBACK)}</dt>
                     <dd>
                         <p>Отправка обратной связи о прохождении. Данный этап является опциональным и служит для того, чтобы собрать некую статистику по вопросам и узнать другие моменты, что понравилось, а что нет.</p>
                         

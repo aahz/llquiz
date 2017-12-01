@@ -41,6 +41,7 @@ app.get('/', (req, res) => {
     res.send(welcomePageRenderer({
         title: `${packageData.description} — ${PAGE_TITLE_BASE}`,
         header: HEADERS[Math.floor(Math.random() * HEADERS.length)],
+        url: argv.url,
     }));
 });
 
@@ -70,6 +71,9 @@ app.get('/results/:id', (req, res) => {
             });
         }))
         .then(({candidate, questions}) => {
+            let totalCount = 0;
+            let wrongCount = 0;
+
             const results = Object.keys(candidate.result.answers).map(questionId => {
 
                 const result = {
@@ -95,8 +99,12 @@ app.get('/results/:id', (req, res) => {
 
                 result.correctAnswer = correctVariant.text;
 
+                totalCount += 1;
+
                 if (correctVariant.id !== candidateVariant.id) {
                     result.candidateAnswer = candidateVariant.text;
+
+                    wrongCount += 1;
                 }
 
                 return result;
@@ -104,8 +112,11 @@ app.get('/results/:id', (req, res) => {
 
             res.send(resultsPageRenderer({
                 title: `Результаты тестирования кандидата ${candidate.name} — ${PAGE_TITLE_BASE}`,
+                name: candidate.name,
                 link: candidate.result.link,
                 comment: candidate.feedback.comment,
+                totalCount,
+                correctCount: totalCount - wrongCount,
                 results,
             }))
         })
