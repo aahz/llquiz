@@ -21,6 +21,11 @@ const CandidateSchema = new Schema({
         required: true,
         unique: true,
     },
+    cv: {
+        type: String,
+        trim: true,
+        match: REGEX.URL,
+    },
     email: {
         type: String,
         trim: true,
