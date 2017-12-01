@@ -5,6 +5,7 @@ const isBoolean = require('lodash/isBoolean');
 
 const {wrapResponseSuccess, wrapResponseError} = require('../utils/response');
 const ERROR_CODES = require('../constants/error-codes');
+const REGEX = require('../constants/regex');
 const MOCK_START = require('../mock/start');
 const {CandidateModel} = require('../models/candidate');
 
@@ -13,10 +14,24 @@ module.exports = function (req, res) {
 
     const name = get(body, 'name');
     const skype = get(body, 'skype');
+    const link = get(body, 'link');
+    const cv = get(body, 'cv');
     const isFinalAttempt = get(body, 'isFinalAttempt', false);
 
-    if (isEmpty(name) || isEmpty(skype) || !isBoolean(isFinalAttempt)) {
+    if (isEmpty(name) || isEmpty(skype) || isEmpty(link) || isEmpty(cv) || !isBoolean(isFinalAttempt)) {
         res.json(wrapResponseError(ERROR_CODES.INSUFFICIENT_DATA));
+
+        return;
+    }
+
+    if (!REGEX.URL.test(link)) {
+        res.json(wrapResponseError(ERROR_CODES.NO_CHERRY_ON_THE_CAKE));
+
+        return;
+    }
+
+    if (!REGEX.URL.test(cv)) {
+        res.json(wrapResponseError(ERROR_CODES.NO_CREAM_ON_THE_CAKE));
 
         return;
     }
@@ -46,7 +61,7 @@ module.exports = function (req, res) {
             });
     })
         .then(() => new Promise((resolve, reject) => {
-            const candidate = new CandidateModel({name, skype});
+            const candidate = new CandidateModel({name, skype, cv, result: {link}});
 
             candidate.save(error => {
                 if (error) {
