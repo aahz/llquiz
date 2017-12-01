@@ -6,6 +6,7 @@ module.exports = {
     [ERROR_CODES.WHO_ARE_YOU]: 'Не найден запрошенный идетификатор пользователя',
     [ERROR_CODES.NO_SECOND_CHANCE]: 'Зарегистрированна попытка повторного прохождения теста в режиме отправки результата',
     [ERROR_CODES.NO_CHERRY_ON_THE_CAKE]: 'Невилидная ссылка на репозитория с исходным кодом тестового задания',
+    [ERROR_CODES.NO_CREAM_ON_THE_CAKE]: 'Невилидная ссылка на резюме',
     [ERROR_CODES.ANONYMOUS_FOUND]: 'Невалидный адрес электронной почты',
     [ERROR_CODES.EENY_MEENY_MINY_MOE]: 'Количество ответов не совпадает с количеством вопросов',
     [ERROR_CODES.RAMBLING]: 'Некорректное содержание объекта с ответами',

@@ -4,6 +4,7 @@ module.exports = {
     WHO_ARE_YOU: 'who_are_you',
     NO_SECOND_CHANCE: 'no_second_chance',
     NO_CHERRY_ON_THE_CAKE: 'no_cherry_on_the_cake',
+    NO_CREAM_ON_THE_CAKE: 'no_cream_on_the_cake',
     ANONYMOUS_FOUND: 'anonymous_found',
     EENY_MEENY_MINY_MOE: 'eeny_meeny_miny_moe',
     RAMBLING: 'rambling',
