@@ -19,7 +19,6 @@ bot.on('error', error => {
 });
 
 const DATE_FORMAT = 'dddd, DD.MM.YYYY, HH:mm:ss';
-const CHANNEL_ID = 'G77220AK1';
 
 function notifyNewCandidate(candidate, questions, correctAnswers) {
     const questionsIds = Object.keys(correctAnswers);
@@ -69,7 +68,7 @@ function notifyNewCandidate(candidate, questions, correctAnswers) {
         return result;
     }).join('\n');
 
-    bot.postMessage(CHANNEL_ID, message);
+    bot.postMessage(argv.channel, message);
 }
 
 module.exports = {

@@ -12,6 +12,12 @@ const argv = require('yargs')
         description: 'Set Slack Bot API token for new candidates notifications',
         demand: true,
     })
+    .option('channel', {
+        alias: 'c',
+        type: 'string',
+        description: 'Set Slack Bot destination channel id',
+        demand: true,
+    })
     .help()
     .argv;
 
