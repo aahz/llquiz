@@ -1,5 +1,6 @@
 @media only screen {
-    .g-text-only-print {
+    .g-text-only-print,
+    .g-block-only-print {
         display: none !important;
     }
 }
@@ -16,6 +17,10 @@
 
     code {
         white-space: pre-wrap;
+    }
+
+    .g-block-only-print {
+        display: block !important;
     }
 
     .g-text-only-print {

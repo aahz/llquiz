@@ -212,6 +212,7 @@ ul.ll-list > li {
     position: relative;
     padding: 0 20px;
     margin: 0 20px 10px;
+    font-size: 18px;
 }
 
 .ll-quote:before {
@@ -233,9 +234,9 @@ ul.ll-list > li {
 }
 
 .ll-answer {
-    display: flex;
     position: relative;
-    padding: 20px 10px 10px 30px;
+    padding: 20px 30px 10px;
+    border-radius: 10px;
     margin-bottom: 20px;
     min-height: 40px;
     background: #D0D0D0;
@@ -254,10 +255,9 @@ ul.ll-list > li {
     background: #DB523D;
 }
 
-.ll-answer.ll-answer__m-positive:after {
-    content: 'этот вопрос понравился кандидату';
+.ll-answer.ll-answer__m-positive:after,
+.ll-answer.ll-answer__m-negative:after {
     position: absolute;
-    color: #48B484;
     top: -11px;
     right: 0;
     background: #FAFAFA;
@@ -266,16 +266,14 @@ ul.ll-list > li {
     font-size: 0.7em;
 }
 
+.ll-answer.ll-answer__m-positive:after {
+    content: 'этот вопрос понравился кандидату';
+    color: #48B484;
+}
+
 .ll-answer.ll-answer__m-negative:after {
     content: 'этот вопрос не понравился кандидату';
-    position: absolute;
     color: #DB523D;
-    top: -11px;
-    right: 0;
-    background: #FAFAFA;
-    padding: 0 0 0 6px;
-    border-radius: 0 0 0 10px;
-    font-size: 0.7em;
 }
 
 .ll-answer .ll-answer__number {
@@ -286,19 +284,22 @@ ul.ll-list > li {
     height: 20px;
     padding: 10px;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 50%;
     background-color: #FAFAFA;
     color: #D0D0D0;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .ll-answer.ll-answer__m-correct .ll-answer__number {
     color: #48B484;
-}
 
-.ll-answer.ll-answer__m-correct .ll-answer__question__answer__m-incorrect {
-    display: none;
 }
 
 .ll-answer.ll-answer__m-incorrect .ll-answer__number {
     color: #DB523D;
+}
+
+.ll-answer.ll-answer__m-correct .ll-answer__question__answer__m-incorrect {
+    display: none;
 }
