@@ -12,13 +12,15 @@ const {TIME_FOR_ONE_QUESTION, MOCK_NUMBER} = require('../constants/restrictions'
 const REGEX = require('../constants/regex');
 const ERROR_CODES = require('../constants/error-codes');
 
+const {notifyNewCandidate} = require('../bot');
+
 const {CandidateModel} = require('../models/candidate');
 const {QuestionModel} = require('../models/question');
 
 function prepareResponse(questions) {
     const response = {};
 
-    MOCK_QUESTIONS.forEach(question => {
+    questions.forEach(question => {
         const variants = get(question, 'variants', []);
 
         response[get(question, 'id')] = get(variants.filter(variant => variant.isCorrect), [0, 'id']);
@@ -32,18 +34,11 @@ module.exports = function (req, res) {
 
     const id = get(body, 'id');
     const email = get(body, 'email');
-    const link = get(body, 'link');
     const answers = get(body, 'result', {});
     const answersLength = Object.values(answers).length;
 
-    if (isEmpty(id) || !isString(id) || isEmpty(email) || isEmpty(link)) {
+    if (isEmpty(id) || !isString(id) || isEmpty(email)) {
         res.json(wrapResponseError(ERROR_CODES.INSUFFICIENT_DATA));
-
-        return;
-    }
-
-    if (!REGEX.URL.test(link)) {
-        res.json(wrapResponseError(ERROR_CODES.NO_CHERRY_ON_THE_CAKE));
 
         return;
     }
@@ -102,10 +97,10 @@ module.exports = function (req, res) {
 
                 shouldBeStartedAt = new Date(completedTimestamp - Object.values(correctAnswers).length * TIME_FOR_ONE_QUESTION);
 
-                resolve({correctAnswers, correctAnswersLength});
+                resolve({questions, correctAnswers, correctAnswersLength});
             });
     })
-        .then(({correctAnswers, correctAnswersLength}) => new Promise((resolve, reject) => {
+        .then(({questions, correctAnswers, correctAnswersLength}) => new Promise((resolve, reject) => {
             CandidateModel.findOne({_id: id})
                 .exec((error, candidate) => {
                     if (error) {
@@ -139,7 +134,6 @@ module.exports = function (req, res) {
                     }
 
                     candidate.email = email;
-                    candidate.result.link = link;
                     candidate.result.answers = answers;
                     candidate.result.completedAt = completedAt;
 
@@ -149,6 +143,8 @@ module.exports = function (req, res) {
 
                             return;
                         }
+
+                        notifyNewCandidate(candidate, questions, correctAnswers);
 
                         res.json(wrapResponseSuccess(correctAnswers));
                     });
