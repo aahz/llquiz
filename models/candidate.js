@@ -49,7 +49,7 @@ const CandidateSchema = new Schema({
     },
     feedback: {
         liked: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: [],
             allowBlank: true,
             validate: {
@@ -58,7 +58,7 @@ const CandidateSchema = new Schema({
             },
         },
         disliked: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: [],
             allowBlank: true,
             validate: {
