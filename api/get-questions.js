@@ -95,15 +95,15 @@ module.exports = function (req, res) {
 
                     res.json(wrapResponseSuccess({
                         restriction: TIME_FOR_ONE_QUESTION * questions.length,
-                        questions: questions.map(question => ({
+                        questions: shuffle(questions.map(question => ({
                             id: question.id,
                             text: question.text,
                             expression: question.expression,
-                            variants: question.variants.map(variant => ({
+                            variants: shuffle(question.variants.map(variant => ({
                                 id: variant.id,
                                 text: variant.text,
-                            })),
-                        })),
+                            }))),
+                        }))),
                     }));
                 });
         }))
