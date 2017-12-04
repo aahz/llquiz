@@ -22,6 +22,7 @@ const argv = require('yargs')
         alias: 'u',
         type: 'string',
         description: 'Set server url for results link creation',
+        default: '/',
     })
     .help()
     .argv;
