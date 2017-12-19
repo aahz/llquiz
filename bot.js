@@ -14,6 +14,7 @@ const botStartupPromise = new Promise((resolve, reject) => {
     bot.on('error', reject);
 });
 
+const CHANNEL = argv.channel;
 const DATE_FORMAT = 'DD.MM.YYYY, HH:mm:ss';
 
 function notifyNewCandidate(candidate) {
@@ -35,7 +36,15 @@ function notifyNewCandidate(candidate) {
     message += `Ссылка на репозиторий: ${candidate.result.link}\n`;
     message += `Ответы на вопросы теста: ${trimEnd(argv.url, '/')}/results/${candidate.id}`;
 
-    bot.postMessage(argv.channel, message, {icon_emoji: ':bust_in_silhouette:'});
+    botStartupPromise
+        .then(() => {
+            bot.postMessage(CHANNEL, message, {
+                icon_emoji: ':bust_in_silhouette:',
+            });
+        })
+        .catch(error => {
+
+        });
 }
 
 module.exports = {
