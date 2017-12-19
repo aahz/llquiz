@@ -93,6 +93,8 @@ a:focus {
 
 dl.ll-api-list > dt > h3 {
     color: #48B484;
+    white-space: nowrap;
+    overflow-x: scroll;
 }
 
 dl.ll-api-list > dd {
@@ -148,6 +150,9 @@ ul.ll-list > li {
     background: #F5F5DC;
     border: 1px dashed #F0DC82;
     box-sizing: border-box;
+    overflow-x: scroll;
+    max-width: 100%;
+    vertical-align: middle;
 }
 
 .ll-code-block {
@@ -293,7 +298,6 @@ ul.ll-list > li {
 
 .ll-answer.ll-answer__m-correct .ll-answer__number {
     color: #48B484;
-
 }
 
 .ll-answer.ll-answer__m-incorrect .ll-answer__number {
@@ -302,4 +306,44 @@ ul.ll-list > li {
 
 .ll-answer.ll-answer__m-correct .ll-answer__question__answer__m-incorrect {
     display: none;
+}
+
+@media only screen and (max-width: 700px) {
+    html, body {
+        font-size: 12px;
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-align: center;
+    }
+
+    .ll-page {
+        min-width: inherit;
+    }
+
+    .ll-content {
+        box-shadow: none;
+        margin-bottom: 0;
+    }
+
+    .ll-title {
+        font-size: 1.6em;
+        min-height: 82px;
+    }
+
+    .ll-list {
+        padding-left: 0;
+    }
+
+    dl.ll-api-list > dd {
+        border: none;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    dl.ll-api-list > dd > h4:before {
+        display: none;
+    }
 }
