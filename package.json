@@ -1,7 +1,7 @@
 {
   "name": "llquiz",
   "private": true,
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Тестовое задание для кандидатов на должность Frontend-разработчика.",
   "main": "server.js",
   "scripts": {
